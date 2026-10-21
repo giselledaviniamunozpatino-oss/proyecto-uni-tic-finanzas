@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador Estadístico y Rendimiento</title>
+    <title>Analizador Estadístico y Financiero</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,8 +15,8 @@
     <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">BI Dashboard</span>
-                <h1 class="text-lg font-semibold tracking-tight text-white">Estadísticas y Comparativa Temporal</h1>
+                <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Dashboard Pro</span>
+                <h1 class="text-lg font-semibold tracking-tight text-white">Analizador Estadístico de Emprendimiento</h1>
             </div>
             <div class="text-sm text-slate-400">Estado: <span class="text-emerald-400 font-bold">En Línea</span></div>
         </div>
@@ -28,22 +28,42 @@
         <!-- Hero Section -->
         <div class="text-center mb-6">
             <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl mb-2">
-                Panel de <span class="text-indigo-500">Rendimiento Financiero</span>
+                Panel de <span class="text-indigo-500">Control Dinámico</span>
             </h2>
             <p class="max-w-xl mx-auto text-slate-400 text-sm">
-                Evaluación de salud operativa, porcentajes de utilidad y distribución de recursos por fechas.
+                Ingresa datos numéricos, fechas y montos para ver estadísticas instantáneas, porcentajes y gráficos de torta.
             </p>
+        </div>
+
+        <!-- Formulario para ingresar datos -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <h3 class="text-base font-semibold text-white">➕ Registrar Nuevo Movimiento (Ingreso / Egreso)</h3>
+            <form id="form-transaccion" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <input type="date" id="input-fecha" required class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                <select id="input-tipo" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <option value="Ingreso">Ingreso</option>
+                    <option value="Egreso">Egreso</option>
+                </select>
+                <select id="input-cat" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <option value="Ventas">Ventas (Ingreso)</option>
+                    <option value="Proveedores">Proveedores</option>
+                    <option value="Publicidad">Publicidad</option>
+                    <option value="Salarios">Salarios</option>
+                    <option value="Logística">Logística</option>
+                </select>
+                <input type="number" id="input-monto" placeholder="Monto en Bs." step="0.01" required class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm rounded-xl py-2 px-4 transition-all shadow-lg shadow-indigo-600/30">Agregar Dato</button>
+            </form>
         </div>
 
         <!-- Escala de Desempeño (Malo a Bueno) -->
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-base font-semibold text-white">Escala de Salud del Emprendimiento</h3>
-                <span id="badge-estado" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Regular (En Evaluación)</span>
+                <span id="badge-estado" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Regular</span>
             </div>
-            <!-- Barra de Progreso / Escala -->
             <div class="w-full bg-slate-950 rounded-full h-4 p-0.5 border border-slate-800">
-                <div id="barra-escala" class="bg-gradient-to-r from-rose-500 via-amber-500 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 65%;"></div>
+                <div id="barra-escala" class="bg-gradient-to-r from-rose-500 via-amber-500 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
             </div>
             <div class="flex justify-between text-xs text-slate-500 font-medium">
                 <span class="text-rose-400">Malo (&lt;10%)</span>
@@ -57,31 +77,35 @@
             
             <!-- Panel de Datos Clave -->
             <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col justify-between space-y-6">
-                <h3 class="text-base font-semibold text-white">Resumen de Porcentajes y Comparativa</h3>
+                <h3 class="text-base font-semibold text-white">Resumen Estadístico y Porcentajes</h3>
                 
                 <div class="space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                        <span class="text-sm text-slate-400">Margen de Utilidad Neta:</span>
-                        <span id="txt-margen" class="text-lg font-bold text-emerald-400">18.5%</span>
+                        <span class="text-sm text-slate-400">Ingresos Totales:</span>
+                        <span id="txt-ingresos" class="text-lg font-bold text-emerald-400">Bs. 0.00</span>
                     </div>
                     <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                        <span class="text-sm text-slate-400">Crecimiento vs Mes Anterior:</span>
-                        <span class="text-lg font-bold text-indigo-400">+12.4% 📈</span>
+                        <span class="text-sm text-slate-400">Egresos Totales:</span>
+                        <span id="txt-egresos" class="text-lg font-bold text-rose-400">Bs. 0.00</span>
                     </div>
                     <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                        <span class="text-sm text-slate-400">Egresos Operativos (Sobre Ingresos):</span>
-                        <span class="text-lg font-bold text-rose-400">81.5%</span>
+                        <span class="text-sm text-slate-400">Utilidad Neta:</span>
+                        <span id="txt-utilidad" class="text-lg font-bold text-indigo-400">Bs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <span class="text-sm text-slate-400">Margen de Utilidad (%):</span>
+                        <span id="txt-margen" class="text-lg font-bold text-amber-400">0.0%</span>
                     </div>
                 </div>
 
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-400">
-                    💡 <strong>Nota analítica:</strong> Los porcentajes se calculan de manera automática cruzando las fechas de registro en Google Sheets.
+                    💡 <strong>Consejo:</strong> Agrega varios registros con diferentes fechas y categorías para ver cómo cambian los porcentajes y las tortas estadísticas al instante.
                 </div>
             </div>
 
             <!-- Gráfico de Torta (Chart.js) -->
             <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col items-center justify-center">
-                <h3 class="text-base font-semibold text-white mb-4 w-full text-left">Distribución de Egresos por Categoría (Torta)</h3>
+                <h3 class="text-base font-semibold text-white mb-4 w-full text-left">Distribución de Egresos por Categoría</h3>
                 <div class="w-full max-w-xs h-64 relative">
                     <canvas id="chartTorta"></canvas>
                 </div>
@@ -93,18 +117,25 @@
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900 py-6 mt-12 text-center text-xs text-slate-500">
-        Módulo de Estadísticas y Comparativas — Emprendimiento Automatizado.
+        Módulo Estadístico Interactivo — Emprendimiento Automatizado.
     </footer>
 
-    <!-- Script para inicializar el Gráfico de Torta -->
+    <!-- Script de Lógica e Interactividad -->
     <script>
+        // Base de datos simulada inicial
+        let transacciones = [
+            { fecha: '2026-10-01', tipo: 'Ingreso', categoria: 'Ventas', monto: 5000 },
+            { fecha: '2026-10-05', tipo: 'Egreso', categoria: 'Proveedores', monto: 2000 },
+            { fecha: '2026-10-10', tipo: 'Egreso', categoria: 'Publicidad', monto: 800 }
+        ];
+
         const ctx = document.getElementById('chartTorta').getContext('2d');
-        const chartTorta = new Chart(ctx, {
+        let chartTorta = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Proveedores', 'Publicidad', 'Salarios', 'Logística'],
                 datasets: [{
-                    data: [45, 20, 25, 10],
+                    data: [2000, 800, 0, 0],
                     backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#f43f5e'],
                     borderWidth: 0
                 }]
@@ -120,6 +151,74 @@
                 }
             }
         });
+
+        function actualizarDashboard() {
+            let totalIngresos = 0;
+            let totalEgresos = 0;
+            let egresosCat = { 'Proveedores': 0, 'Publicidad': 0, 'Salarios': 0, 'Logística': 0 };
+
+            transacciones.forEach(t => {
+                if (t.tipo === 'Ingreso') {
+                    totalIngresos += t.monto;
+                } else {
+                    totalEgresos += t.monto;
+                    if (egresosCat[t.categoria] !== undefined) {
+                        egresosCat[t.categoria] += t.monto;
+                    }
+                }
+            });
+
+            let utilidad = totalIngresos - totalEgresos;
+            let margen = totalIngresos > 0 ? (utilidad / totalIngresos) * 100 : 0;
+
+            // Actualizar textos en pantalla
+            document.getElementById('txt-ingresos').innerText = `Bs. ${totalIngresos.toFixed(2)}`;
+            document.getElementById('txt-egresos').innerText = `Bs. ${totalEgresos.toFixed(2)}`;
+            document.getElementById('txt-utilidad').innerText = `Bs. ${utilidad.toFixed(2)}`;
+            document.getElementById('txt-margen').innerText = `${margen.toFixed(1)}%`;
+
+            // Actualizar escala de salud (malo a bueno)
+            let barra = document.getElementById('barra-escala');
+            let badge = document.getElementById('badge-estado');
+            let porcentajeBarra = Math.min(Math.max(margen * 2.5, 5), 100);
+            barra.style.width = `${porcentajeBarra}%`;
+
+            if (margen < 10) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                badge.innerText = "Malo (Riesgo)";
+            } else if (margen <= 25) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                badge.innerText = "Regular (Estable)";
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                badge.innerText = "Bueno (Óptimo)";
+            }
+
+            // Actualizar gráfico de torta
+            chartTorta.data.datasets[0].data = [
+                egresosCat['Proveedores'],
+                egresosCat['Publicidad'],
+                egresosCat['Salarios'],
+                egresosCat['Logística']
+            ];
+            chartTorta.update();
+        }
+
+        // Manejar envío del formulario
+        document.getElementById('form-transaccion').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let fecha = document.getElementById('input-fecha').value;
+            let tipo = document.getElementById('input-tipo').value;
+            let categoria = document.getElementById('input-cat').value;
+            let monto = parseFloat(document.getElementById('input-monto').value);
+
+            transacciones.push({ fecha, tipo, categoria, monto });
+            actualizarDashboard();
+            this.reset();
+        });
+
+        // Ejecutar al iniciar
+        actualizarDashboard();
     </script>
 </body>
 </html>
