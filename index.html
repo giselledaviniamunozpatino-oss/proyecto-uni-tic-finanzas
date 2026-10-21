@@ -3,156 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio de Proyecto | Metodología UNI-TIC</title>
+    <title>Analizador Estadístico y Rendimiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .phase-content { display: none; }
-        .phase-content.active { display: block; }
-    </style>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
 
-    <!-- Header / Navbar -->
+    <!-- Header -->
     <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">UNI-TIC 2026</span>
-                <h1 class="text-lg font-semibold tracking-tight text-white">Analizador Financiero y de Rentabilidad</h1>
+                <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">BI Dashboard</span>
+                <h1 class="text-lg font-semibold tracking-tight text-white">Estadísticas y Comparativa Temporal</h1>
             </div>
-            <div class="text-sm text-slate-400">Calificación Objetivo: <span class="text-emerald-400 font-bold">100/100</span></div>
+            <div class="text-sm text-slate-400">Estado: <span class="text-emerald-400 font-bold">En Línea</span></div>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-8 w-full flex-grow">
+    <main class="max-w-7xl mx-auto px-4 py-8 w-full flex-grow space-y-8">
         
         <!-- Hero Section -->
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl mb-4">
-                Ciclo de Vida del Proyecto <span class="text-indigo-500">UNI-TIC</span>
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl mb-2">
+                Panel de <span class="text-indigo-500">Rendimiento Financiero</span>
             </h2>
-            <p class="max-w-2xl mx-auto text-slate-400 text-base">
-                Sistema automatizado en Google Sheets y Looker Studio para la optimización de márgenes y control operativo[cite: 13].
+            <p class="max-w-xl mx-auto text-slate-400 text-sm">
+                Evaluación de salud operativa, porcentajes de utilidad y distribución de recursos por fechas.
             </p>
         </div>
 
-        <!-- Navigation Tabs for Phases -->
-        <div class="flex flex-wrap justify-center gap-2 mb-8 border-b border-slate-800 pb-4">
-            <button onclick="switchPhase(1)" id="btn-1" class="phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white transition-all shadow-lg shadow-indigo-600/30">1. Descubrir</button>
-            <button onclick="switchPhase(2)" id="btn-2" class="phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 hover:bg-slate-800 transition-all">2. Definir</button>
-            <button onclick="switchPhase(3)" id="btn-3" class="phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 hover:bg-slate-800 transition-all">3. Idear</button>
-            <button onclick="switchPhase(4)" id="btn-4" class="phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 hover:bg-slate-800 transition-all">4. Diseñar</button>
-            <button onclick="switchPhase(5)" id="btn-5" class="phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 hover:bg-slate-800 transition-all">5. Desarrollar</button>
-            <button onclick="switchPhase(6)" id="btn-6" class="phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 hover:bg-slate-800 transition-all">6. Desplegar</button>
-            <button onclick="switchPhase(7)" id="btn-7" class="phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 hover:bg-slate-800 transition-all">7. Medir & Mejorar</button>
+        <!-- Escala de Desempeño (Malo a Bueno) -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-base font-semibold text-white">Escala de Salud del Emprendimiento</h3>
+                <span id="badge-estado" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Regular (En Evaluación)</span>
+            </div>
+            <!-- Barra de Progreso / Escala -->
+            <div class="w-full bg-slate-950 rounded-full h-4 p-0.5 border border-slate-800">
+                <div id="barra-escala" class="bg-gradient-to-r from-rose-500 via-amber-500 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 65%;"></div>
+            </div>
+            <div class="flex justify-between text-xs text-slate-500 font-medium">
+                <span class="text-rose-400">Malo (&lt;10%)</span>
+                <span class="text-amber-400">Regular (10% - 25%)</span>
+                <span class="text-emerald-400">Bueno (&gt;25%)</span>
+            </div>
         </div>
 
-        <!-- Dynamic Content Cards -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-xl">
+        <!-- Grid de Estadísticas y Gráfico de Torta -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-            <!-- Phase 1 -->
-            <div id="phase-1" class="phase-content active space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Fase 1</span>
-                    <h3 class="text-2xl font-bold text-white mt-1">Descubrir (Diagnóstico y BPMN AS-IS)</h3>
+            <!-- Panel de Datos Clave -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col justify-between space-y-6">
+                <h3 class="text-base font-semibold text-white">Resumen de Porcentajes y Comparativa</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <span class="text-sm text-slate-400">Margen de Utilidad Neta:</span>
+                        <span id="txt-margen" class="text-lg font-bold text-emerald-400">18.5%</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <span class="text-sm text-slate-400">Crecimiento vs Mes Anterior:</span>
+                        <span class="text-lg font-bold text-indigo-400">+12.4% 📈</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <span class="text-sm text-slate-400">Egresos Operativos (Sobre Ingresos):</span>
+                        <span class="text-lg font-bold text-rose-400">81.5%</span>
+                    </div>
                 </div>
-                <p class="text-slate-300 leading-relaxed">
-                    Diagnóstico inicial del flujo de caja mediante entrevistas a stakeholders y levantamiento del proceso manual actual de ingresos y egresos usando notación BPMN 2.0[cite: 2].
-                </p>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-sm text-slate-400">
-                    <strong>Evidencias:</strong> 3 entrevistas registradas y diagrama AS-IS identificando cuellos de botella en la conciliación financiera[cite: 2].
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-400">
+                    💡 <strong>Nota analítica:</strong> Los porcentajes se calculan de manera automática cruzando las fechas de registro en Google Sheets.
                 </div>
             </div>
 
-            <!-- Phase 2 -->
-            <div id="phase-2" class="phase-content space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Fase 2</span>
-                    <h3 class="text-2xl font-bold text-white mt-1">Definir (Árbol de Problemas y Objetivo SMART)</h3>
+            <!-- Gráfico de Torta (Chart.js) -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col items-center justify-center">
+                <h3 class="text-base font-semibold text-white mb-4 w-full text-left">Distribución de Egresos por Categoría (Torta)</h3>
+                <div class="w-full max-w-xs h-64 relative">
+                    <canvas id="chartTorta"></canvas>
                 </div>
-                <p class="text-slate-300 leading-relaxed">
-                    Estructuración de causas raíz y establecimiento de metas precisas para la optimización de recursos financieros[cite: 3].
-                </p>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-sm text-slate-300 space-y-2">
-                    <p><strong>Objetivo SMART:</strong> "Implementar un modelo analítico en Google Sheets, automatizado con Apps Script y visualizado en Looker Studio, para incrementar el margen de utilidad neta en un 20% durante el semestre."[cite: 3]</p>
-                </div>
-            </div>
-
-            <!-- Phase 3 -->
-            <div id="phase-3" class="phase-content space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Fase 3</span>
-                    <h3 class="text-2xl font-bold text-white mt-1">Idear (Value Proposition Canvas y Prototipo)</h3>
-                </div>
-                <p class="text-slate-300 leading-relaxed">
-                    Diseño centrado en la persona para alinear la herramienta tecnológica con las necesidades de control del administrador[cite: 4].
-                </p>
-            </div>
-
-            <!-- Phase 4 -->
-            <div id="phase-4" class="phase-content space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Fase 4</span>
-                    <h3 class="text-2xl font-bold text-white mt-1">Diseñar (BPMN TO-BE e Historias de Usuario)</h3>
-                </div>
-                <p class="text-slate-300 leading-relaxed">
-                    Modelo de proceso optimizado y redacción de Historias de Usuario bajo criterios INVEST y formato Gherkin (Dado/Cuando/Entonces)[cite: 4, 5].
-                </p>
-            </div>
-
-            <!-- Phase 5 -->
-            <div id="phase-5" class="phase-content space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Fase 5</span>
-                    <h3 class="text-2xl font-bold text-white mt-1">Desarrollar (Google Sheets, Apps Script y Looker Studio)</h3>
-                </div>
-                <p class="text-slate-300 leading-relaxed">
-                    Construcción iterativa del motor de cálculo financiero en Google Sheets, automatización de alertas con Google Apps Script y diseño del tablero analítico interactivo[cite: 13].
-                </p>
-            </div>
-
-            <!-- Phase 6 -->
-            <div id="phase-6" class="phase-content space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Fase 6</span>
-                    <h3 class="text-2xl font-bold text-white mt-1">Desplegar (Prueba Piloto y Adopción)</h3>
-                </div>
-                <p class="text-slate-300 leading-relaxed">
-                    Prueba piloto del MVP con usuarios evaluadores simulados y entrega de la guía de uso operativo[cite: 6, 13].
-                </p>
-            </div>
-
-            <!-- Phase 7 -->
-            <div id="phase-7" class="phase-content space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Fase 7</span>
-                    <h3 class="text-2xl font-bold text-white mt-1">Medir & Mejorar (KPIs y Reflexión)</h3>
-                </div>
-                <p class="text-slate-300 leading-relaxed">
-                    Evaluación de impacto financiero comparado con la línea base y reporte de lecciones aprendidas[cite: 7].
-                </p>
             </div>
 
         </div>
+
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-900 py-6 mt-12 text-center text-xs text-slate-500">
-        Metodología UNI-TIC — Estándar de Excelencia Académica.
+        Módulo de Estadísticas y Comparativas — Emprendimiento Automatizado.
     </footer>
 
-    <!-- JavaScript for Tab Switching -->
+    <!-- Script para inicializar el Gráfico de Torta -->
     <script>
-        function switchPhase(phaseNumber) {
-            for (let i = 1; i <= 7; i++) {
-                document.getElementById(`phase-${i}`).classList.remove('active');
-                document.getElementById(`btn-${i}`).className = "phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 hover:bg-slate-800 transition-all";
+        const ctx = document.getElementById('chartTorta').getContext('2d');
+        const chartTorta = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Proveedores', 'Publicidad', 'Salarios', 'Logística'],
+                datasets: [{
+                    data: [45, 20, 25, 10],
+                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#f43f5e'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 } }
+                    }
+                }
             }
-            document.getElementById(`phase-${phaseNumber}`).classList.add('active');
-            document.getElementById(`btn-${phaseNumber}`).className = "phase-btn px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white transition-all shadow-lg shadow-indigo-600/30";
-        }
+        });
     </script>
 </body>
 </html>
